@@ -7,9 +7,14 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "ethers": "^5.4.7",
+    "html-react-parser": "^1.4.8",
+    "jotai": "^1.6.0",
+    "module-alias": "^2.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "styled-components": "^5.3.3",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -35,5 +40,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "_moduleAliases": {
+    "@root":        ".",
+    "@assets":      "src/assets",
+    "@components":  "src/components",
+    "@contracts":   "lsrc/contracts",
+    "@state":       "src/state",
+    "@utils":       "src/utils",
+    "@services":    "src/services",
   }
 }
