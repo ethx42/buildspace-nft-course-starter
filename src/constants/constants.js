@@ -9,7 +9,7 @@ export const MESSAGE = {
   MISSING_METAMASK: 'Make sure you have metamask!',
   GET_METAMASK: 'Get Metamask!',
   UNAUTHORIZED_ACCOUNT: 'No authorized account found',
-  CONTINUE_IN_METAMASK: 'Continue in Metamask ...',
+  CONTINUE_IN_METAMASK: 'Confirm Tx in Metamask ...',
   MINTING_NFT: 'Minting your NFT ...',
 
 }

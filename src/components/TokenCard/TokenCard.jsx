@@ -5,17 +5,18 @@ import { useAtom } from 'jotai';
 
 import {ReactComponent as RaribleLogo} from '../../assets/rarible-logo.svg';
 import {ReactComponent as OpenSeaLogo} from '../../assets/opensea-logo.svg';
-import { askContractTo } from '../../utils/askContractTo';
-import {Container, ControlContainer, SvgCardContainer, TokenLinks, TransferButton, Icon} from './TokenCard.styles';
+import { CONTRACT, SOCIAL } from '../../constants';
+import { currentAccountAtom, ethersAPIAtom, loadingAtom } from '../../state';
+import { askContractTo } from '../../utils';
 
-import { CONTRACT, SOCIAL } from '../../utils/constants';
-import { currentAccountAtom, ethersAPIAtom, loadingAtom } from "../../state";
+import { Container, ControlContainer, SvgCardContainer, TokenLinks, TransferButton, Icon } from './TokenCard.styles';
 
 const destinationAddress = '0xeee3322a7a7d155EBA6efD0d7Db931AAeDE54Fa8';
 
 const TokenCard = ({ token }) => {
   const [ethersAPI] = useAtom(ethersAPIAtom);
   const [currentAccount] = useAtom(currentAccountAtom);
+  // eslint-disable-next-line no-unused-vars
   const [_, setLoading] = useAtom(loadingAtom);
 
   const { connectedContract } = ethersAPI;
@@ -50,8 +51,8 @@ const TokenCard = ({ token }) => {
         <TransferButton onClick={transferNFTHandler}>Transfer</TransferButton>
 
         <TokenLinks>
-          <Icon><OpenSeaLogo className="tokenCard-logo" onClick={() => goToLink(SOCIAL.OPENSEA_LINK)} /></Icon>
-          <Icon><RaribleLogo className="tokenCard-logo" onClick={() => goToLink(SOCIAL.RARIBLE_LINK)} /></Icon>
+          <Icon><OpenSeaLogo onClick={() => goToLink(SOCIAL.OPENSEA_LINK)} /></Icon>
+          <Icon><RaribleLogo onClick={() => goToLink(SOCIAL.RARIBLE_LINK)} /></Icon>
         </TokenLinks>
       </ControlContainer>
     </Container>

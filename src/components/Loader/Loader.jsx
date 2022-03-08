@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useAtom } from 'jotai';
 
 import eth_space_gen from '../../assets/eth_space_gen.gif';
-import {Container, Description, SpinnerImage} from "./Loader.styles";
 import { loadingAtom } from '../../state';
+
+import { Container, Description, SpinnerImage } from './Loader.styles';
 
 const Loader = () => {
   const [loadingText] = useAtom(loadingAtom);

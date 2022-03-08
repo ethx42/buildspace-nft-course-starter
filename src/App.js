@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { v4 as uuid } from 'uuid';
 
-import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
-import Loader from './components/Loader/Loader';
-import TokenCard from './components/TokenCard/TokenCard';
-import { connectContract } from './utils/connectContract';
-import { MESSAGE, SOCIAL, CONTRACT } from './utils/constants';
-import { askContractTo } from "./utils/askContractTo";
+import { Loader, TokenCard } from './components';
+import { MESSAGE, SOCIAL, CONTRACT } from './constants';
 import { loadingAtom, currentAccountAtom, ethersAPIAtom } from './state';
+import { connectContract, askContractTo } from './utils';
+
+import './styles/App.css';
 
 const App = () => {
   const { ethereum, connectedContract } = connectContract(CONTRACT.ADDRESS);
+  // eslint-disable-next-line no-unused-vars
   const [_, setEthersAPI] = useAtom(ethersAPIAtom);
   const [currentAccount, setCurrentAccount] = useAtom(currentAccountAtom);
   const [loadingMsg, setLoadingMsg] = useAtom(loadingAtom);
@@ -54,7 +54,6 @@ const App = () => {
   const setupEventListener = async () => {
     try {
       if (ethereum) {
-        console.log('event listener', connectedContract.on)
         connectedContract.on('NewEEALienNFTMinted', (from, tokenId, finalSvg) => {
           setCollection(arr => [...arr, { component: finalSvg, id: tokenId.toNumber() }]);
           console.log('collection', collection)

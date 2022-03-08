@@ -1,5 +1,5 @@
-import { CONTRACT, MESSAGE } from './constants';
-import { connectContract } from "./connectContract";
+import { CONTRACT, MESSAGE } from '../constants';
+import { connectContract } from '../utils';
 
 export const askContractTo = (callback) => async ({ utils }) => {
 	const { ethereum } = connectContract(CONTRACT.ADDRESS);
