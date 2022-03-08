@@ -48,6 +48,6 @@
     "@contracts":   "lsrc/contracts",
     "@state":       "src/state",
     "@utils":       "src/utils",
-    "@services":    "src/services",
+    "@services":    "src/services"
   }
 }
