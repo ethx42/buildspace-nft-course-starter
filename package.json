@@ -45,7 +45,7 @@
     "@root":        ".",
     "@assets":      "src/assets",
     "@components":  "src/components",
-    "@contracts":   "lsrc/contracts",
+    "@contracts":   "src/contracts",
     "@state":       "src/state",
     "@utils":       "src/utils",
     "@services":    "src/services"
