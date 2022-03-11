@@ -55,7 +55,7 @@ const App = () => {
             Each unique. Each beautiful. Discover your {CONTRACT.TOKEN_SYMBOL} NFT today.
           </p>
           <p className="sub-text">
-            {CONTRACT.TOTAL_AVAILABLE_TOKENS - totalMinted} Tokens Available
+            {ownedTokens.length !== 0 && `${CONTRACT.TOTAL_AVAILABLE_TOKENS - totalMinted} Tokens Available`}
           </p>
           {currentAccount === ""
             ? (
