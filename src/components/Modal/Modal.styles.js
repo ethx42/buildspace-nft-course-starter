@@ -23,3 +23,17 @@ export const Container = styled.div`
     height: 75%;
 	`}
 `;
+
+export const CloseModal = styled.i`
+  display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	width: 5rem;
+	height: 5rem;
+	background-color: #35aee2;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	cursor: pointer;
+`

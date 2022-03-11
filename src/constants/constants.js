@@ -23,6 +23,8 @@ export const MESSAGE = {
   MINTING_NFT: 'Minting your NFT ...',
   INITIAL: 'Loading data ...',
   NETWORK_IS_NOT_RINKEBY: 'You are not connected to the Rinkeby Test Network!',
+  VALIDATING_TRANSACTION: 'Validating Tx ...',
+  INVALID_ADDRESS: 'Bad formatted address',
 }
 
 export const SOCIAL = {

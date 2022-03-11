@@ -1,14 +1,14 @@
 import { CONTRACT, MESSAGE } from '../constants';
 import { connectContract } from '../utils';
 
-export const askContractTo = (callback) => async ({ utils }) => {
+export const askContractTo = (callback) => async ({ utils, params = {} }) => {
 	const { ethereum } = connectContract(CONTRACT.ADDRESS);
 
 	try {
 		if (ethereum) {
 			utils?.setLoadingMsg(MESSAGE.CONTINUE_IN_METAMASK);
 
-			await callback();
+			await callback({ params });
 
 			utils?.setLoadingMsg(undefined);
 		} else {

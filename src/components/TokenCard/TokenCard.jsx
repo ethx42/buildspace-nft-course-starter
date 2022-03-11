@@ -32,15 +32,11 @@ const TokenCard = ({ token }) => {
       {parse(token.component)}
     </SvgCardContainer>);
 
-  const renderTransferModal = ({ svgComponent, metadata }) => {
-    console.log('renderTransferModal');
-
-    return (
-      <Modal isFullscreen>
-        <TransferToken svgComponent={svgComponent} metadata={metadata} />
-      </Modal>
-    )
-  }
+  const renderTransferModal = ({ svgComponent, metadata }) => (
+    <Modal isFullscreen closable >
+      <TransferToken svgComponent={svgComponent} metadata={metadata} />
+    </Modal>
+  );
 
   return (
     <Container>
@@ -60,6 +56,7 @@ const TokenCard = ({ token }) => {
         >
           <span>Transfer your NFT</span>
         </ReactTooltip>
+
         <Icon>
           <TransferButtonWrapper onClick={() => {}}>
             <TransferIcon data-tip data-for="transferButton" onClick={() => setActiveTransfer(true)} />

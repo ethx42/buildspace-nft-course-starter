@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 
 import { CONTRACT, MESSAGE } from '../constants';
-import { ownedTokensAtom, totalMintedAtom, ethersAPIAtom, loadingAtom } from '../state';
+import { ownedTokensAtom, totalMintedAtom, ethersAPIAtom, loadingAtom, currentAccountAtom } from '../state';
 
 const {
 	NewEEALienNFTMinted,
@@ -17,6 +17,7 @@ export const useContractServices = () => {
 	const [, setLoadingMsg] = useAtom(loadingAtom);
 	const [ownedTokens, setOwnedTokens] = useAtom(ownedTokensAtom);
 	const [, setTotalMinted] = useAtom(totalMintedAtom);
+	const [currentAccount] = useAtom(currentAccountAtom);
 
 	const { ethereum, connectedContract } = ethersAPI;
 
@@ -30,6 +31,12 @@ export const useContractServices = () => {
 		console.log(`Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
 	}
 
+	async function transferNFT({ params }) {
+		const transferTxn = await connectedContract['safeTransferFrom(address,address,uint256)'](currentAccount, params.destinationAddress, params.tokenId);
+		setLoadingMsg(MESSAGE.VALIDATING_TRANSACTION);
+		await transferTxn.wait();
+		console.log(`Transferred, see transaction: https://rinkeby.etherscan.io/tx/${transferTxn.hash}`);
+	}
 
 	async function setupEventListener() {
 		try {
@@ -73,5 +80,5 @@ export const useContractServices = () => {
 		}
 	}
 
-	return { setupEventListener, mintERC721 }
+	return { setupEventListener, mintERC721, transferNFT }
 }

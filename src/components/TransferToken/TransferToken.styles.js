@@ -21,6 +21,7 @@ export const Container = styled.div`
 
 export const TokenWrapper = styled.div`
 	min-width: 35%;
+	padding-bottom: 5rem;
 `;
 
 export const AddressInputWrapper = styled.div`
@@ -32,7 +33,7 @@ export const AddressInputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 400px;
+  max-width: 55rem;
   margin: 0 auto;
   border-radius: 2px;
   padding: 1.4rem 2rem 1.6rem;
@@ -81,6 +82,10 @@ export const DescriptionWrapper = styled.div`
 	width: 100%;
 `;
 
-export const LegendsWrapper = styled.div`
-	width: 100%;
-`;
+export const DestinationAddressError = styled.p`
+	color: red;
+	font-size: 1.2rem;
+	margin-top: 0.5rem;
+	width: 55rem;
+	text-align: right;
+`
