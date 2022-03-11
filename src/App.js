@@ -1,115 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,  } from 'react';
 import { useAtom } from 'jotai';
 import { v4 as uuid } from 'uuid';
 
 import twitterLogo from './assets/twitter-logo.svg';
-import { Loader, TokenCard } from './components';
-import { MESSAGE, SOCIAL, CONTRACT } from './constants';
-import { loadingAtom, currentAccountAtom, ethersAPIAtom } from './state';
+import {Loader, Modal, TokenCard} from './components';
+import { SOCIAL, CONTRACT } from './constants';
+import { ownedTokensAtom, totalMintedAtom, currentAccountAtom, loadingAtom, ethersAPIAtom } from './state';
 import { connectContract, askContractTo } from './utils';
+import { useContractServices, useMetamaskServices } from "./services";
 
 import './styles/App.css';
 
 const App = () => {
   const { ethereum, connectedContract } = connectContract(CONTRACT.ADDRESS);
-  // eslint-disable-next-line no-unused-vars
-  const [_, setEthersAPI] = useAtom(ethersAPIAtom);
-  const [currentAccount, setCurrentAccount] = useAtom(currentAccountAtom);
+  const [, setEthersAPI] = useAtom(ethersAPIAtom);
   const [loadingMsg, setLoadingMsg] = useAtom(loadingAtom);
-  const [collection, setCollection] = useState([]);
+  const [currentAccount] = useAtom(currentAccountAtom);
+  const [ownedTokens] = useAtom(ownedTokensAtom);
+  const [totalMinted] = useAtom(totalMintedAtom);
 
-  const checkIfWalletIsConnected = async () => {
-    if (!ethereum) {
-      console.log(MESSAGE.MISSING_METAMASK);
-      return;
-    }
-
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
-
-    if (accounts.length !== 0) {
-      const account = accounts[0];
-      setCurrentAccount(account);
-      setupEventListener();
-    } else {
-      console.error(MESSAGE.UNAUTHORIZED_ACCOUNT)
-    }
-  }
-
-  const connectWallet = async () => {
-    try {
-      if (!ethereum) {
-        alert(MESSAGE.GET_METAMASK);
-        return;
-      }
-
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      setCurrentAccount(accounts[0]);
-      setupEventListener();
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const setupEventListener = async () => {
-    try {
-      if (ethereum) {
-        connectedContract.on('NewEEALienNFTMinted', (from, tokenId, finalSvg) => {
-          setCollection(arr => [...arr, { component: finalSvg, id: tokenId.toNumber() }]);
-          console.log('collection', collection)
-        });
-
-        connectedContract.on('TotalSupply', (totalSupply) => {
-          console.log('totalSupply' ,totalSupply);
-        });
-
-        connectedContract.on('OwnedItemsByAddress', (items) => {
-          console.log('ownedItems -> ', items);
-        });
-
-        connectedContract.on('GetMetadata', (metadata) => {
-          console.log('metadata' ,metadata);
-        });
-
-        connectedContract.on('NoMoreTokens', (data) => {
-          console.log('NoMoreTokensEvent', data);
-        });
-
-        connectedContract.on('Transfer', (from, to, tokenId) => {
-          console.log(`NFT with ID ${tokenId} transferred from ${from}, to ${to} succesfully`);
-        });
-
-      } else {
-        console.error(MESSAGE.MISSING_ETHEREUM);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  // const retrieveMyOwnedTokens = async () => {
-  //   try {
-  //     if (ethereum) {
-  //       setLoading(true);
-  //       const ownedTokens = await connectedContract.getMyOwnedTokens();
-  //       await ownedTokens.wait();
-  //       setLoading(false);
-  //
-  //     } else {
-  //       console.error(MESSAGE.MISSING_ETHEREUM);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.log(error);
-  //   }
-  // }
-
-  const mintERC721 = async () => {
-    const nftTxn = await connectedContract.mintAnNFT();
-    setLoadingMsg(MESSAGE.MINTING_NFT)
-    await nftTxn.wait();
-    console.log(`Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
-  }
+  const { checkIfWalletIsConnected, connectWallet } = useMetamaskServices();
+  const { mintERC721 } = useContractServices();
 
   const mintNFT = () => askContractTo(mintERC721)({ utils: { setLoadingMsg }});
 
@@ -131,13 +42,20 @@ const App = () => {
 
   return (
     <div className="App">
-      {loadingMsg && <Loader />}
+      {loadingMsg &&
+        <Modal isFullscreen>
+          <Loader />
+        </Modal>
+      }
 
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">My {CONTRACT.TOKEN_NAME}-NFT Collection</p>
           <p className="sub-text">
             Each unique. Each beautiful. Discover your {CONTRACT.TOKEN_SYMBOL} NFT today.
+          </p>
+          <p className="sub-text">
+            {CONTRACT.TOTAL_AVAILABLE_TOKENS - totalMinted} Tokens Available
           </p>
           {currentAccount === ""
             ? (
@@ -153,13 +71,10 @@ const App = () => {
 
         <div className="body-container">
           <div className="tokens-container" >
-            {collection.length && collection?.map(item => (<TokenCard token={item} key={uuid()} />))}
+            { ownedTokens.length > 0 && ownedTokens?.map(item => (<TokenCard token={item} key={uuid()} />)) }
           </div>
         </div>
 
-        {/*<button onClick={retrieveMyOwnedTokens} className="cta-button connect-wallet-button">*/}
-        {/*  Log My owned Tokens*/}
-        {/*</button>*/}
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
           <a

@@ -1,7 +1,15 @@
+html { box-sizing: border-box; font-size: 10px; }
+*, *:before, *:after { box-sizing: inherit; }
+body, ul, li  { margin: 0; padding: 0; }
+li { list-style: none; }
+p, h1, h2, h3, h4, h5, h6 { margin-top: 0; }
+a { text-decoration: none; }
+input { border-style: none; background: transparent; outline: none; }
+button { padding: 0; background: none; border: none; outline: none; }
+
 .App {
   height: 100vh;
   background-color: #0d1116;
-  overflow: scroll;
   text-align: center;
 }
 
@@ -15,6 +23,10 @@
 
 .header-container {
   padding-top: 30px;
+}
+
+.body-container {
+  height: 100%;
 }
 
 .header {
@@ -128,13 +140,5 @@
   display: flex;
   flex-flow: row wrap;
   gap: 2rem;
-  margin: 0 2rem;
-}
-
-.loader-show {
-  display: block;
-}
-
-.loader {
-  display: none;
+  margin: 2.5rem 2rem;
 }

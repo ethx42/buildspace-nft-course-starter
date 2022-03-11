@@ -1,25 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 import parse from 'html-react-parser';
-import { useAtom } from 'jotai';
 
-import {ReactComponent as RaribleLogo} from '../../assets/rarible-logo.svg';
-import {ReactComponent as OpenSeaLogo} from '../../assets/opensea-logo.svg';
+import Modal from '../Modal';
+import TransferToken from '../TransferToken';
+import { ReactComponent as RaribleLogo } from '../../assets/rarible-logo.svg';
+import { ReactComponent as OpenSeaLogo } from '../../assets/opensea-logo.svg';
+import { ReactComponent as TransferIcon } from '../../assets/zap.svg';
 import { CONTRACT, SOCIAL } from '../../constants';
-import { currentAccountAtom, ethersAPIAtom, loadingAtom } from '../../state';
-import { askContractTo } from '../../utils';
 
-import { Container, ControlContainer, SvgCardContainer, TokenLinks, TransferButton, Icon } from './TokenCard.styles';
-
-const destinationAddress = '0xeee3322a7a7d155EBA6efD0d7Db931AAeDE54Fa8';
+import { Container, ControlContainer, SvgCardContainer, TokenLinks, TransferButtonWrapper, Icon } from './TokenCard.styles';
 
 const TokenCard = ({ token }) => {
-  const [ethersAPI] = useAtom(ethersAPIAtom);
-  const [currentAccount] = useAtom(currentAccountAtom);
-  // eslint-disable-next-line no-unused-vars
-  const [_, setLoading] = useAtom(loadingAtom);
-
-  const { connectedContract } = ethersAPI;
+  const [activeTransfer, setActiveTransfer] = useState(false);
 
   const goToLink = (provider) => {
     const url = provider === SOCIAL.OPENSEA_LINK
@@ -33,28 +27,55 @@ const TokenCard = ({ token }) => {
     ); 
   }
 
-  const transferNFT = async () => {
-    const transferTxn = await connectedContract["safeTransferFrom(address,address,uint256)"](currentAccount, destinationAddress, token.id);
-    await transferTxn.wait();
-    console.log(`Transferred, see transaction: https://rinkeby.etherscan.io/tx/${transferTxn.hash}`);
-  }
+  const renderTokenSvg = () =>
+    (<SvgCardContainer>
+      {parse(token.component)}
+    </SvgCardContainer>);
 
-  const transferNFTHandler = () => askContractTo(transferNFT)({ utils: { setLoading }});
+  const renderTransferModal = ({ svgComponent, metadata }) => {
+    console.log('renderTransferModal');
+
+    return (
+      <Modal isFullscreen>
+        <TransferToken svgComponent={svgComponent} metadata={metadata} />
+      </Modal>
+    )
+  }
 
   return (
     <Container>
-      <SvgCardContainer>
-        {parse(token.component)}
-      </SvgCardContainer>
+      {renderTokenSvg()}
 
       <ControlContainer>
-        <TransferButton onClick={transferNFTHandler}>Transfer</TransferButton>
+        <ReactTooltip
+          id="transferButton"
+          place="top"
+          delayShow={200}
+          delayHide={500}
+          textColor="#000"
+          effect="solid"
+          backgroundColor="#FADF00"
+          border
+          arrowColor="#FADF00"
+        >
+          <span>Transfer your NFT</span>
+        </ReactTooltip>
+        <Icon>
+          <TransferButtonWrapper onClick={() => {}}>
+            <TransferIcon data-tip data-for="transferButton" onClick={() => setActiveTransfer(true)} />
+          </TransferButtonWrapper>
+        </Icon>
 
         <TokenLinks>
           <Icon><OpenSeaLogo onClick={() => goToLink(SOCIAL.OPENSEA_LINK)} /></Icon>
           <Icon><RaribleLogo onClick={() => goToLink(SOCIAL.RARIBLE_LINK)} /></Icon>
         </TokenLinks>
       </ControlContainer>
+
+      {activeTransfer && renderTransferModal({
+        svgComponent: renderTokenSvg(),
+        metadata: { id: token.id }}
+      )}
     </Container>
   )
 }

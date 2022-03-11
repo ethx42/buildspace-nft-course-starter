@@ -5,11 +5,6 @@ export const Container = styled.div`
 	flex-flow: column nowrap;
 	align-content: center;
 	justify-content: center;
-	width: 100%;
-	height: 100vh;
-	position: absolute;
-  background-color: rgba(16, 10, 27, 0.4);
-	backdrop-filter: blur(7px);
 `;
 
 export const SpinnerImage = styled.img`

@@ -17,10 +17,21 @@ export const ControlContainer = styled.div`
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
+  background: #C101EE;
+	border: 1px solid #35aee2;
+	border-top-style: none;
+  border-bottom-left-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+  padding: 0 0.5rem;
 `;
 
-export const TransferButton = styled.button`
+export const TransferButtonWrapper = styled.div`
   cursor: pointer;
+	border-radius: 0.5rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const TokenLinks = styled.div`
@@ -31,9 +42,15 @@ export const TokenLinks = styled.div`
 `;
 
 export const Icon = styled.span`
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+
   & > svg {
-    width: 2rem;
-    height: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
     cursor: pointer;
   }
 `;
